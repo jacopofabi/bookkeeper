@@ -1238,6 +1238,7 @@
 				<sonar.language>java</sonar.language>
 				<sonar.java.source>11</sonar.java.source>
 				<sonar.java.file.suffixes>.java</sonar.java.file.suffixes>
+				<sonar.tests>${project.basedir}/bookeeper-benchmark/src/test/</sonar.tests>
 				<sonar.verbose>true</sonar.verbose>
 				<!-- Path to JaCoCo XML coverage reports -->
 				<!-- Default directory where is stored jacoco report -->
