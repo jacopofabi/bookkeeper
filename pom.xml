@@ -1139,5 +1139,11 @@
         </plugins>
       </build>
     </profile>
+    <profile>
+    	<id>noTest</id>
+        <properties>
+        	<maven.test.skip>true</maven.test.skip>
+        </properties>
+    </profile>
   </profiles>
 </project>
