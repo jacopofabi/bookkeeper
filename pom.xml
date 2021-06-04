@@ -1176,12 +1176,11 @@
             <version>${jacoco-maven-plugin.version}</version>
             <executions>
               <execution>
-                  <id>report</id>
-				  <!-- aggregazione dei report eseguita nella fase di verify maven, se attivata -->
-				  <!-- tutti i moduli hanno nel pom il plugin org.jacoco, e il goal di "report" viene attivato nella fase di verify da tutti i moduli -->
-				  <!-- questo significa che, quando viene effettuata la build, tutti i moduli generano il report del coverage dei propri test, risultati che vengono aggregati successivamente -->
+                  <id>report-aggregate</id>
                   <phase>verify</phase>
                   <goals>
+				  <!-- tutti i moduli hanno nel pom il plugin jacoco e generano il report di coverage nella fase di verify -->
+				  <!-- quando viene effettuata la build, i vari report di coverage vengono aggregati per il calcolo totale del coverage su tutti i moduli del progetto -->
                     <goal>report-aggregate</goal>
                   </goals>
               </execution>
