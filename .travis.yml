@@ -11,7 +11,7 @@ dist:
 addons:
     sonarcloud:
         organization: "jacopofabi"
-        token: "756ceaccf04fdf74fa76877889c6dded08e92f49"
+        token: "dc17a21664c89069c86c5352947fdc95506bced2"
         
 script: 
     # JaCoCo is used to have code coverage, "-Pcoverage" activates the maven profile in the pom.xml
