@@ -1218,11 +1218,10 @@
 				<sonar.organization>jacopofabi</sonar.organization>
 				<sonar.projectKey>jacopofabi_bookkeeper</sonar.projectKey>
 				<sonar.projectName>bookkeeper</sonar.projectName>
-				<sonar.login>3349a373a2da4668f193b6662ed86aba1dbdc515</sonar.login>
+				<sonar.login>756ceaccf04fdf74fa76877889c6dded08e92f49</sonar.login>
 				<sonar.language>java</sonar.language>
 				<sonar.java.source>11</sonar.java.source>
 				<sonar.java.file.suffixes>.java</sonar.java.file.suffixes>
-				<sonar.tests>${project.basedir}/bookeeper-benchmark/src/test/</sonar.tests>
 				<sonar.verbose>true</sonar.verbose>
 				<!-- Path to JaCoCo XML coverage reports -->
 				<!-- Default directory where is stored jacoco report -->
