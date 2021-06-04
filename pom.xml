@@ -70,7 +70,7 @@
     <module>bookkeeper-dist</module>
     <module>shaded</module>
     <module>microbenchmarks</module>
-    <module>tests</module>
+    <!-- <module>tests</module> -->
   </modules>
   <mailingLists>
     <mailingList>
@@ -849,6 +849,11 @@
 		<artifactId>sonar-maven-plugin</artifactId>
 		<version>3.6.0.1398</version>
 	</plugin>
+	<plugin>
+		<groupId>org.jacoco</groupId>
+		<artifactId>jacoco-maven-plugin</artifactId>
+		<version>0.8.6</version>
+	</plugin>
 	
       <plugin>
         <groupId>com.github.spotbugs</groupId>
@@ -1211,7 +1216,7 @@
     <profile>
        <id>sonar</id>
         	<activation>
-            	<activeByDefault>true</activeByDefault>
+            	<activeByDefault>false</activeByDefault>
             </activation>
           	<properties>
                	<sonar.host.url>http://sonarcloud.io</sonar.host.url>
