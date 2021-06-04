@@ -1196,5 +1196,25 @@
         </plugins>
       </build>
     </profile>
+	
+	<profile>
+       <id>sonar</id>
+        	<activation>
+            	<activeByDefault>false</activeByDefault>
+            </activation>
+          	<properties>
+               	<sonar.host.url>http://sonarcloud.io</sonar.host.url>
+				<sonar.organization>jacopofabi</sonar.organization>
+				<sonar.projectKey>jacopofabi_bookkeeper</sonar.projectKey>
+				<sonar.projectName>bookkeeper</sonar.projectName>
+				<sonar.login>dc17a21664c89069c86c5352947fdc95506bced2</sonar.login>
+				<sonar.language>java</sonar.language>
+				<sonar.java.source>11</sonar.java.source>
+				<sonar.java.file.suffixes>.java</sonar.java.file.suffixes>
+				<sonar.verbose>true</sonar.verbose>
+				<!-- Path to JaCoCo XML coverage reports -->
+				<!-- <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/jacoco-gen/jcs-coverage/file.xml</sonar.coverage.jacoco.xmlReportPaths> -->
+			</properties>
+    </profile>
   </profiles>
 </project>
