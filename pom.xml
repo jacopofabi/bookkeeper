@@ -853,6 +853,20 @@
 		<groupId>org.jacoco</groupId>
 		<artifactId>jacoco-maven-plugin</artifactId>
 		<version>0.8.6</version>
+		<executions>
+          <execution>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>report</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+        </executions>
 	</plugin>
 	
       <plugin>
@@ -1054,18 +1068,6 @@
               <testFailureIgnore>true</testFailureIgnore>
             </configuration>
           </plugin>
-          <plugin>
-            <groupId>org.jacoco</groupId>
-            <artifactId>jacoco-maven-plugin</artifactId>
-            <version>0.8.6</version>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>prepare-agent</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
         </plugins>
       </build>
     </profile>
@@ -1159,12 +1161,12 @@
     </profile>
 	
 	 <!-- JaCoCo plugin to configure coverage report-->
-  	 <!-- prepare-agent: configure JaCoCo to collect coverage data-->
-  	 <!-- report: create a report in the directory tests/target/site/jacoco/jacoco.xml-->
+  	 <!-- prepare-agent: configure JaCoCo to collect coverage data, generating jacoco.exec in the default directory "target" -->
+  	 <!-- report: create a report in various format in the directory ${project.reporting.outputDirectory}/jacoco -->
     <profile>
       <id>coverage</id>
       <activation>
-        <activeByDefault>false</activeByDefault>
+        <activeByDefault>true</activeByDefault>
       </activation>
       <build>
         <plugins>
@@ -1174,17 +1176,14 @@
             <version>${jacoco-maven-plugin.version}</version>
             <executions>
               <execution>
-                <id>prepare-agent</id>
-                <goals>
-                  <goal>prepare-agent</goal>
-                </goals>
-              </execution>
-              <execution>
-                <id>report</id>
-                <phase>verify</phase>
-                <goals>
-                  <goal>report</goal>
-                </goals>
+                  <id>report</id>
+				  <!-- aggregazione dei report eseguita nella fase di verify maven, se attivata -->
+				  <!-- tutti i moduli hanno nel pom il plugin org.jacoco, e il goal di "report" viene attivato nella fase di verify da tutti i moduli -->
+				  <!-- questo significa che, quando viene effettuata la build, tutti i moduli generano il report del coverage dei propri test, risultati che vengono aggregati successivamente -->
+                  <phase>verify</phase>
+                  <goals>
+                    <goal>report-aggregate</goal>
+                  </goals>
               </execution>
             </executions>
           </plugin>
@@ -1213,7 +1212,7 @@
 				<sonar.java.file.suffixes>.java</sonar.java.file.suffixes>
 				<sonar.verbose>true</sonar.verbose>
 				<!-- Path to JaCoCo XML coverage reports -->
-				<!-- <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/jacoco-gen/jcs-coverage/file.xml</sonar.coverage.jacoco.xmlReportPaths> -->
+				<sonar.coverage.jacoco.xmlReportPaths>${project.reporting.outputDirectory}/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 			</properties>
     </profile>
   </profiles>
