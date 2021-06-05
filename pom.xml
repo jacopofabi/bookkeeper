@@ -71,7 +71,7 @@
     <module>shaded</module>
     <module>microbenchmarks</module>
     <!-- <module>tests</module> -->
-	<module>my_tests</module>
+	<!-- <module>my_tests</module> -->
   </modules>
   <mailingLists>
     <mailingList>
@@ -213,6 +213,7 @@
 	<sonar.verbose>true</sonar.verbose>
 	<aggregate.report.dir>my_tests/target/site/jacoco-aggregate/jacoco.xml</aggregate.report.dir>
 	<redirectTestOutputToFile>true</redirectTestOutputToFile>
+	<sonar.coverage.jacoco.xmlReportPaths>${basedir}/${aggregate.report.dir}</sonar.coverage.jacoco.xmlReportPaths>
 	
   </properties>
   
