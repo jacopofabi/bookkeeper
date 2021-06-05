@@ -199,7 +199,24 @@
     <spotbugs-maven-plugin.version>3.1.8</spotbugs-maven-plugin.version>
     <forkCount.variable>1</forkCount.variable>
     <servlet-api.version>4.0.0</servlet-api.version>
+	
+	
+	<!-- SONAR -->
+	<sonar.host.url>http://sonarcloud.io</sonar.host.url>
+	<sonar.organization>jacopofabi</sonar.organization>
+	<sonar.projectKey>jacopofabi_bookkeeper</sonar.projectKey>
+	<sonar.projectName>bookkeeper</sonar.projectName>
+	<sonar.login>dc17a21664c89069c86c5352947fdc95506bced2</sonar.login>
+	<sonar.language>java</sonar.language>
+	<sonar.java.source>11</sonar.java.source>
+	<sonar.java.file.suffixes>.java</sonar.java.file.suffixes>
+	<sonar.verbose>true</sonar.verbose>
+	<aggregate.report.dir>my_tests/target/site/jacoco-aggregate/jacoco.xml</aggregate.report.dir>
+	<redirectTestOutputToFile>true</redirectTestOutputToFile>
+	
   </properties>
+  
+  
 
   <!-- dependency definitions -->
   <dependencyManagement>
@@ -1060,42 +1077,18 @@
             <version>${jacoco-maven-plugin.version}</version>
             <executions>
               <execution>
-               	<id>report-aggregate</id>
+               	<id>report</id>
                	<phase>verify</phase>
                	<goals>
 			  		<!-- tutti i moduli hanno nel pom il plugin jacoco e generano il report di coverage nella fase verify maven -->
 			  		<!-- quando viene effettuata la build, i vari report vengono aggregati per il calcolo totale del coverage su tutti i moduli del progetto -->
                		<goal>report-aggregate</goal>
                	</goals>
-               	<configuration>
-					<!-- non funziona, l'XML che aggrega non ci sta un cazzo dentro, come se li piglia i vari report dei moduli??? -->
-					<outputDirectory>${project.reporting.outputDirectory}/jacoco</outputDirectory>
-		  		</configuration>
               </execution>
             </executions>
           </plugin>
         </plugins>
       </build>
-    </profile>
-	<profile>
-       <id>sonar</id>
-        	<activation>
-            	<activeByDefault>false</activeByDefault>
-            </activation>
-          	<properties>
-               	<sonar.host.url>http://sonarcloud.io</sonar.host.url>
-				<sonar.organization>jacopofabi</sonar.organization>
-				<sonar.projectKey>jacopofabi_bookkeeper</sonar.projectKey>
-				<sonar.projectName>bookkeeper</sonar.projectName>
-				<sonar.login>dc17a21664c89069c86c5352947fdc95506bced2</sonar.login>
-				<sonar.language>java</sonar.language>
-				<sonar.java.source>11</sonar.java.source>
-				<sonar.java.file.suffixes>.java</sonar.java.file.suffixes>
-				<sonar.verbose>true</sonar.verbose>
-				
-				<!-- Path to JaCoCo XML coverage reports -->
-				<sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/bookkeeper-server/target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
-			</properties>
     </profile>
   </profiles>
 </project>
