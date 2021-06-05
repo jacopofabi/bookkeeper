@@ -51,25 +51,25 @@
     <url>https://builds.apache.org/job/bookkeeper-master</url>
   </ciManagement>
   <modules>
-    <module>buildtools</module>
-    <module>circe-checksum</module>
-    <module>bookkeeper-common</module>
-    <module>bookkeeper-common-allocator</module>
-    <module>stats</module>
+    <!-- <module>buildtools</module> -->
+    <!-- <module>circe-checksum</module> -->
+    <module>bookkeeper-common</module> 
+    <!-- <module>bookkeeper-common-allocator</module> -->
+    <!-- <module>stats</module> -->
     <!-- TODO: move `bookkeeper-stats` and `bookkeeper-stats-providers` as submodules of `stats` -->
-    <module>bookkeeper-stats</module>
-    <module>bookkeeper-proto</module>
+    <!-- <module>bookkeeper-stats</module> -->
+    <!-- <module>bookkeeper-proto</module> -->
     <module>bookkeeper-server</module>
-    <module>bookkeeper-benchmark</module>
-    <module>bookkeeper-stats-providers</module>
-    <module>bookkeeper-http</module>
-    <module>stream</module>
-    <module>tools</module>
-    <module>cpu-affinity</module>
-    <module>metadata-drivers</module>
-    <module>bookkeeper-dist</module>
-    <module>shaded</module>
-    <module>microbenchmarks</module>
+    <!-- <module>bookkeeper-benchmark</module> -->
+    <!-- <module>bookkeeper-stats-providers</module> -->
+    <!-- <module>bookkeeper-http</module> -->
+    <!-- <module>stream</module> -->
+    <!-- <module>tools</module> -->
+    <!-- <module>cpu-affinity</module> -->
+    <!-- <module>metadata-drivers</module> -->
+    <!-- <module>bookkeeper-dist</module> -->
+    <!-- <module>shaded</module> -->
+    <!-- <module>microbenchmarks</module> -->
     <!-- <module>tests</module> -->
   </modules>
   <mailingLists>
@@ -1067,6 +1067,7 @@
                		<goal>report-aggregate</goal>
                	</goals>
                	<configuration>
+					<!-- non funziona, l'XML che aggrega non ci sta un cazzo dentro, come se li piglia i vari report dei moduli??? -->
 					<outputDirectory>${project.reporting.outputDirectory}/jacoco</outputDirectory>
 		  		</configuration>
               </execution>
@@ -1090,11 +1091,9 @@
 				<sonar.java.source>11</sonar.java.source>
 				<sonar.java.file.suffixes>.java</sonar.java.file.suffixes>
 				<sonar.verbose>true</sonar.verbose>
-				<!-- <aggregate.report.dir>my_tests/target/site/jacoco-aggregate/jacoco.xml</aggregate.report.dir>
-				<redirectTestOutputToFile>true</redirectTestOutputToFile> -->
 				
 				<!-- Path to JaCoCo XML coverage reports -->
-				<sonar.coverage.jacoco.xmlReportPaths>${project.reporting.outputDirectory}/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+				<sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/bookkeeper-server/target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 			</properties>
     </profile>
   </profiles>
