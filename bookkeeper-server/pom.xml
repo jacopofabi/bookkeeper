@@ -6,9 +6,7 @@
    The ASF licenses this file to You under the Apache License, Version 2.0
    (the "License"); you may not use this file except in compliance with
    the License.  You may obtain a copy of the License at
-
        http://www.apache.org/licenses/LICENSE-2.0
-
    Unless required by applicable law or agreed to in writing, software
    distributed under the License is distributed on an "AS IS" BASIS,
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -299,62 +297,4 @@
       </plugin>
     </plugins>
   </build>
-  
-  <profiles>
-    <profile>
-      <id>vertx-http-server</id>
-      <dependencies>
-        <dependency>
-          <groupId>org.apache.bookkeeper.http</groupId>
-          <artifactId>vertx-http-server</artifactId>
-          <version>${project.parent.version}</version>
-        </dependency>
-      </dependencies>
-    </profile>
-    <profile>
-      <id>tls-certs</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>exec-maven-plugin</artifactId>
-            <version>1.6.0</version>
-            <executions>
-              <execution>
-                <id>Generate Self-Signed Certificates</id>
-                <phase>generate-test-resources</phase>
-                <goals>
-                  <goal>exec</goal>
-                </goals>
-                <configuration>
-                  <workingDirectory>${basedir}/src/test/resources</workingDirectory>
-                  <executable>${basedir}/src/test/resources/generateKeysAndCerts.sh</executable>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <!-- test profiles -->
-    <profile>
-      <id>skipBookKeeperServerTests</id>
-      <activation>
-        <property>
-          <name>skipBookKeeperServerTests</name>
-        </property>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <configuration>
-              <skipTests>true</skipTests>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles
 </project>
