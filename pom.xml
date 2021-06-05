@@ -849,9 +849,6 @@
 		<groupId>org.sonarsource.scanner.maven</groupId>
 		<artifactId>sonar-maven-plugin</artifactId>
 		<version>3.6.0.1398</version>
-		<properties><!-- Path to JaCoCo XML coverage reports -->
-				<sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/bookkeeper-server/target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
-		</properties>
 	</plugin>
 	<plugin>
 		<groupId>org.jacoco</groupId>
