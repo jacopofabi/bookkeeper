@@ -110,7 +110,7 @@
     <javac.target>1.8</javac.target>
     <redirectTestOutputToFile>true</redirectTestOutputToFile>
     <testRetryCount>2</testRetryCount>
-	<sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/bookkeeper-server/target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+	<sonar.coverage.jacoco.xmlReportPaths>${project.reporting.outputDirectory}/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 
     <!-- dependencies -->
     <arquillian-cube.version>1.18.2</arquillian-cube.version>
@@ -1094,7 +1094,7 @@
 				<sonar.verbose>true</sonar.verbose>
 				
 				<!-- Path to JaCoCo XML coverage reports -->
-				<sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/bookkeeper-server/target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+				<sonar.coverage.jacoco.xmlReportPaths>${project.reporting.outputDirectory}/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 			</properties>
     </profile>
   </profiles>

@@ -357,4 +357,8 @@
       </build>
     </profile>
   </profiles>
+  
+  <properties>
+  <sonar.coverage.jacoco.xmlReportPaths>${project.reporting.outputDirectory}/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+</properties>
 </project>
