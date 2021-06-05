@@ -71,6 +71,7 @@
     <module>shaded</module>
     <module>microbenchmarks</module>
     <!-- <module>tests</module> -->
+	<module>my_tests</module>
   </modules>
   <mailingLists>
     <mailingList>
@@ -110,7 +111,6 @@
     <javac.target>1.8</javac.target>
     <redirectTestOutputToFile>true</redirectTestOutputToFile>
     <testRetryCount>2</testRetryCount>
-	<sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/bookkeeper-server/target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 
     <!-- dependencies -->
     <arquillian-cube.version>1.18.2</arquillian-cube.version>
@@ -204,7 +204,7 @@
 	<!-- SONAR -->
 	<sonar.host.url>http://sonarcloud.io</sonar.host.url>
 	<sonar.organization>jacopofabi</sonar.organization>
-	<sonar.projectKey>jacopofabi_bookkeeper</sonar.projectKey>
+	<!--<sonar.projectKey>jacopofabi_bookkeeper</sonar.projectKey>-->
 	<sonar.projectName>bookkeeper</sonar.projectName>
 	<sonar.login>dc17a21664c89069c86c5352947fdc95506bced2</sonar.login>
 	<sonar.language>java</sonar.language>
