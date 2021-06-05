@@ -1062,7 +1062,7 @@
                	<id>report-aggregate</id>
                	<phase>verify</phase>
                	<goals>
-			  		<!-- tutti i moduli hanno nel pom il plugin jacoco e generano il report di coverage nella fase di verify -->
+			  		<!-- tutti i moduli hanno nel pom il plugin jacoco e generano il report di coverage nella fase verify maven -->
 			  		<!-- quando viene effettuata la build, i vari report vengono aggregati per il calcolo totale del coverage su tutti i moduli del progetto -->
                		<goal>report-aggregate</goal>
                	</goals>
