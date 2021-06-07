@@ -75,7 +75,8 @@ public class ReadCacheTest {
         assertEquals(0, cache.size());
         
         if(expectedException != null) {
-        	//test is successful when "expectedException" is thrown and fails if a different or no exception is thrown
+        	//test is successful when "expectedException" is thrown
+        	//test fails if a different or no exception is thrown (even if the assertEquals is correct)
         	exceptionRule.expect(expectedException);
         }
         
