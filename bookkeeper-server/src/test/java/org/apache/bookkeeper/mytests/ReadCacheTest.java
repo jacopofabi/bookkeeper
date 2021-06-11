@@ -24,7 +24,8 @@ import io.netty.buffer.UnpooledByteBufAllocator;
 public class ReadCacheTest {
     private static final ByteBufAllocator allocator = UnpooledByteBufAllocator.DEFAULT;
     private static final int entrySize = 1024;
-    private static final int cacheSize = 10 * entrySize;
+	private static final int numEntries = 10;
+    private static final int cacheSize = numEntries * entrySize;
     
 	private static ReadCache cache;
 	private long ledgerId;
