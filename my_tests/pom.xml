@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>my_tests</artifactId>
-    <name>my_tests</name>
+    <name>Apache BookKeeper :: NewTests</name>
 
     <properties>
 		<!-- Report XML recuperato da Sonar nella directory ..../bookkeeper/my_tests//target/site/jacoco-aggregate/jacoco.xml -->

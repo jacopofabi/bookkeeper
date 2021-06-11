@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.apache.bookkeeper.bookie.storage.ldb.EntryLocationIndexTest;
 import org.apache.bookkeeper.bookie.storage.ldb.ReadCache;
 import org.junit.After;
 import org.junit.Before;
@@ -18,7 +17,6 @@ import org.junit.runners.Parameterized.Parameters;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
-import io.netty.buffer.Unpooled;
 import io.netty.buffer.UnpooledByteBufAllocator;
 
 
@@ -26,17 +24,17 @@ import io.netty.buffer.UnpooledByteBufAllocator;
 public class ReadCacheTest {
     private static final ByteBufAllocator allocator = UnpooledByteBufAllocator.DEFAULT;
     private static final int entrySize = 1024;
-    private static final int cacheCapability = 10 * entrySize;
+    private static final int cacheSize = 10 * entrySize;
     
 	private static ReadCache cache;
 	private long ledgerId;
 	private long entryId;
 	private ByteBuf entry;
-	private boolean expected;
+	private int expected;
 	private Class<? extends Exception> expectedException;
 	
 	
-	public ReadCacheTest(long ledgerId, long entryId, ByteBuf entry, boolean expected, Class<? extends Exception> expectedException) {
+	public ReadCacheTest(long ledgerId, long entryId, ByteBuf entry, int expected, Class<? extends Exception> expectedException) {
 		this.ledgerId = ledgerId;
 		this.entryId = entryId;
 		this.entry = entry;
@@ -46,25 +44,25 @@ public class ReadCacheTest {
 	
 	@Before
 	public  void configure() {
-		cache = new ReadCache(allocator, cacheCapability);
+		cache = new ReadCache(allocator, cacheSize);
 	}
 	
     @Parameters
     public static Collection<Object[]> data() {
     	ByteBuf validEntry = allocator.buffer(entrySize);
-    	ByteBuf invalidEntry = allocator.buffer(11*entrySize);
+    	ByteBuf invalidEntry = allocator.buffer(cacheSize+1);
     	validEntry.writerIndex(validEntry.capacity());
     	invalidEntry.writerIndex(invalidEntry.capacity());
     	
         return Arrays.asList(new Object[][] {
-	            {0, -1, null, false, NullPointerException.class},
-	            {-1, 0, validEntry, false, IllegalArgumentException.class},
-	            {1, 0, validEntry, true, null},
-	            {1, 1, invalidEntry, false, IndexOutOfBoundsException.class}
+	            {0, -1, null, 0, NullPointerException.class},
+	            {-1, 0, validEntry, 0, IllegalArgumentException.class},
+	            {1, 0, validEntry, 1, null},
+	            {1, 1, invalidEntry, 0, IndexOutOfBoundsException.class}
         });
     }
     
-    //rule that allows you to verify that the code throws a specific exception
+    //rule that allows to verify that the code throws a specific exception
     @Rule
     public ExpectedException exceptionRule = ExpectedException.none();
     
@@ -82,12 +80,7 @@ public class ReadCacheTest {
         
         //put an entry into the cache, depending on the parameters we will have different behaviors
         cache.put(ledgerId, entryId, entry);
-        if(cache.count() > 0) {
-        	assertEquals(true, expected);
-        }
-        else {
-        	assertEquals(false, expected);
-        }
+        assertEquals(cache.count(), expected);
 	}
 	
 	@After
