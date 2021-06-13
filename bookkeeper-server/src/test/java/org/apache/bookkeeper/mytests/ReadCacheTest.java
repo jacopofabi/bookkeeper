@@ -43,6 +43,10 @@ public class ReadCacheTest {
 		this.expectedException = expectedException;
 	}
 	
+    //rule that allows to verify that the code throws a specific exception
+    @Rule
+    public ExpectedException exceptionRule = ExpectedException.none();
+	
 	@Before
 	public  void configure() {
 		cache = new ReadCache(allocator, cacheSize);
@@ -63,10 +67,6 @@ public class ReadCacheTest {
         });
     }
     
-    //rule that allows to verify that the code throws a specific exception
-    @Rule
-    public ExpectedException exceptionRule = ExpectedException.none();
-    
 	@Test
 	public void readCachePutTest() {
 		//start with no one entry, so that the total dimension given by the all entries is 0
@@ -82,6 +82,24 @@ public class ReadCacheTest {
         //put an entry into the cache, depending on the parameters we will have different behaviors
         cache.put(ledgerId, entryId, entry);
         assertEquals(cache.count(), expected);
+	}
+	
+	@Test
+	public void readCacheGetTest() {
+        if(expectedException != null) {
+        	exceptionRule.expect(expectedException);
+        }
+        
+        //before put, the entry given by the method get is null (not present in cache)
+        ByteBuf actualEntry = cache.get(ledgerId, entryId);
+        assertEquals(null, actualEntry);
+        
+        
+        //after put, the entry given by the method get is equal to the entry insert with put
+        cache.put(ledgerId, entryId, entry);
+		ByteBuf expectedValue = entry;
+		ByteBuf actualValue = cache.get(ledgerId, entryId);
+		assertEquals(expectedValue, actualValue);
 	}
 	
 	@After
