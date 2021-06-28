@@ -26,9 +26,10 @@ import io.netty.util.ReferenceCountUtil;
 import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
 
+//added import org.apache.bookkeeper.client.api.DigestType because DataFormats.DigestType has been removed, so we used another Enum
 import org.apache.bookkeeper.client.BKException.BKDigestMatchException;
 import org.apache.bookkeeper.client.LedgerHandle;
-import org.apache.bookkeeper.proto.DataFormats.LedgerMetadataFormat.DigestType;
+import org.apache.bookkeeper.client.api.DigestType;
 import org.apache.bookkeeper.util.ByteBufList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,7 +73,7 @@ public abstract class DigestManager {
     public static DigestManager instantiate(long ledgerId, byte[] passwd, DigestType digestType,
             ByteBufAllocator allocator, boolean useV2Protocol) throws GeneralSecurityException {
         switch(digestType) {
-        case HMAC:
+        case MAC:
             return new MacDigestManager(ledgerId, passwd, useV2Protocol, allocator);
         case CRC32:
             return new CRC32DigestManager(ledgerId, useV2Protocol, allocator);

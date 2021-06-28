@@ -34,6 +34,7 @@ import java.util.concurrent.RejectedExecutionException;
 import org.apache.bookkeeper.client.AsyncCallback.AddCallback;
 import org.apache.bookkeeper.client.AsyncCallback.AddCallbackWithLatency;
 import org.apache.bookkeeper.client.SyncCallbackUtils.SyncAddCallback;
+import org.apache.bookkeeper.client.api.DigestType;
 import org.apache.bookkeeper.client.api.LedgerMetadata;
 import org.apache.bookkeeper.client.api.WriteAdvHandle;
 import org.apache.bookkeeper.client.api.WriteFlag;
@@ -60,7 +61,7 @@ public class LedgerHandleAdv extends LedgerHandle implements WriteAdvHandle {
 
     LedgerHandleAdv(ClientContext clientCtx,
                     long ledgerId, Versioned<LedgerMetadata> metadata,
-                    BookKeeper.DigestType digestType, byte[] password, EnumSet<WriteFlag> writeFlags)
+                    DigestType digestType, byte[] password, EnumSet<WriteFlag> writeFlags)
             throws GeneralSecurityException, NumberFormatException {
         super(clientCtx, ledgerId, metadata, digestType, password, writeFlags);
         pendingAddOps = new PriorityBlockingQueue<PendingAddOp>(10, new PendingOpsComparator());
@@ -264,7 +265,7 @@ public class LedgerHandleAdv extends LedgerHandle implements WriteAdvHandle {
         }
 
         if (!waitForWritable(distributionSchedule.getWriteSet(op.getEntryId()),
-                    0, clientCtx.getConf().waitForWriteSetMs)) {
+                    clientCtx.getConf().waitForWriteSetMs, 0)) {
             op.allowFailFastOnUnwritableChannel();
         }
 

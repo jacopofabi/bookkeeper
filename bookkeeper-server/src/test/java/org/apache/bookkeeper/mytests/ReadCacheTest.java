@@ -41,15 +41,11 @@ public class ReadCacheTest {
 		this.entry = entry;
 		this.expected = expected;
 		this.expectedException = expectedException;
-	}
-	
-    //rule that allows to verify that the code throws a specific exception
-    @Rule
-    public ExpectedException exceptionRule = ExpectedException.none();
-	
-	@Before
-	public  void configure() {
-		cache = new ReadCache(allocator, cacheSize);
+        if(expectedException != null) {
+        	//test is successful when "expectedException" is thrown
+        	//test fails if a different or no exception is thrown (even if the assertEquals is correct)
+        	exceptionRule.expect(this.expectedException);
+        }
 	}
 	
     @Parameters
@@ -60,6 +56,7 @@ public class ReadCacheTest {
     	invalidEntry.writerIndex(invalidEntry.capacity());
     	
         return Arrays.asList(new Object[][] {
+        		// ledgerId, entryId, entry, expectedNumberEntries, exception
 	            {0, -1, null, 0, NullPointerException.class},
 	            {-1, 0, validEntry, 0, IllegalArgumentException.class},
 	            {1, 0, validEntry, 1, null},
@@ -67,17 +64,24 @@ public class ReadCacheTest {
         });
     }
     
+    //rule that allows to verify that the code throws a specific exception
+    @Rule
+    public ExpectedException exceptionRule = ExpectedException.none();
+	
+	@Before
+	public void configure() {
+		cache = new ReadCache(allocator, cacheSize);
+	}
+    
 	@Test
-	public void readCachePutTest() {
+	public void putTest() {
+		System.out.println("------PUT--------");
+		System.out.println("LedgerID: " + ledgerId + " entryID: " + entryId);
+		System.out.println("Entry: " + entry);
+		
 		//start with no one entry, so that the total dimension given by the all entries is 0
         assertEquals(0, cache.count());
         assertEquals(0, cache.size());
-        
-        if(expectedException != null) {
-        	//test is successful when "expectedException" is thrown
-        	//test fails if a different or no exception is thrown (even if the assertEquals is correct)
-        	exceptionRule.expect(expectedException);
-        }
         
         //put an entry into the cache, depending on the parameters we will have different behaviors
         cache.put(ledgerId, entryId, entry);
@@ -85,21 +89,18 @@ public class ReadCacheTest {
 	}
 	
 	@Test
-	public void readCacheGetTest() {
+	public void getTest() {
+		System.out.println("------GET--------");
+		
         if(expectedException != null) {
         	exceptionRule.expect(expectedException);
         }
         
-        //before put, the entry given by the method get is null (not present in cache)
-        ByteBuf actualEntry = cache.get(ledgerId, entryId);
-        assertEquals(null, actualEntry);
-        
-        
-        //after put, the entry given by the method get is equal to the entry insert with put
         cache.put(ledgerId, entryId, entry);
-		ByteBuf expectedValue = entry;
-		ByteBuf actualValue = cache.get(ledgerId, entryId);
-		assertEquals(expectedValue, actualValue);
+		System.out.println("LedgerID: "+ledgerId+ " entryID: "+entryId);
+		System.out.println("Entry: "+entry);
+		System.out.println("CacheGet: "+cache.get(ledgerId, entryId));
+		assertEquals(entry, cache.get(ledgerId, entryId));
 	}
 	
 	@After
