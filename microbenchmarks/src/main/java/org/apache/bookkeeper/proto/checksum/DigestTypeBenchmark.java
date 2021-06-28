@@ -30,7 +30,6 @@ import io.netty.buffer.Unpooled;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
-import org.apache.bookkeeper.proto.DataFormats.LedgerMetadataFormat.DigestType;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -109,13 +108,13 @@ public class DigestTypeBenchmark {
         public void doSetup() throws Exception {
             final byte[] password = "password".getBytes(StandardCharsets.UTF_8);
             crc32 = DigestManager.instantiate(ThreadLocalRandom.current().nextLong(0, Long.MAX_VALUE),
-                    password, DigestType.CRC32, PooledByteBufAllocator.DEFAULT, true);
+                    password, org.apache.bookkeeper.client.api.DigestType.CRC32, PooledByteBufAllocator.DEFAULT, true);
 
             crc32c = DigestManager.instantiate(ThreadLocalRandom.current().nextLong(0, Long.MAX_VALUE),
-                    password, DigestType.CRC32C, PooledByteBufAllocator.DEFAULT, true);
+                    password, org.apache.bookkeeper.client.api.DigestType.CRC32C, PooledByteBufAllocator.DEFAULT, true);
 
             mac = DigestManager.instantiate(ThreadLocalRandom.current().nextLong(0, Long.MAX_VALUE),
-                    password, DigestType.HMAC, PooledByteBufAllocator.DEFAULT, true);
+                    password, org.apache.bookkeeper.client.api.DigestType.MAC, PooledByteBufAllocator.DEFAULT, true);
 
             digestBuf = Unpooled.buffer(getDigestManager(digest).getMacCodeLength());
 

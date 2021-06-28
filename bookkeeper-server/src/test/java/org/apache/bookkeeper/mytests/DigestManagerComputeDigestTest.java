@@ -57,9 +57,9 @@ public class DigestManagerComputeDigestTest {
 			
 			//lastAddConfirmed, entryId, length, data, useV2Protocol, result
 			
-			//Suite minimale
-			//{-1,-1,0,null,false,NullPointerException.class},
-			//{0,1,0,generateEntry(0),true,null},
+			//Suite minimale, migliorata tramite l'aggiunta del parametro useV2Protocol
+			{-1,-1,0,null,false,NullPointerException.class},
+			{0,1,0,generateEntry(0),true,null},
 			{1,2,1,generateEntry(1),false,null}
 
 		});

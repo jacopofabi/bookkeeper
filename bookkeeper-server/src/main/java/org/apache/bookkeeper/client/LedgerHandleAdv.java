@@ -61,7 +61,7 @@ public class LedgerHandleAdv extends LedgerHandle implements WriteAdvHandle {
 
     LedgerHandleAdv(ClientContext clientCtx,
                     long ledgerId, Versioned<LedgerMetadata> metadata,
-                    DigestType digestType, byte[] password, EnumSet<WriteFlag> writeFlags)
+                    BookKeeper.DigestType digestType, byte[] password, EnumSet<WriteFlag> writeFlags)
             throws GeneralSecurityException, NumberFormatException {
         super(clientCtx, ledgerId, metadata, digestType, password, writeFlags);
         pendingAddOps = new PriorityBlockingQueue<PendingAddOp>(10, new PendingOpsComparator());
@@ -265,7 +265,7 @@ public class LedgerHandleAdv extends LedgerHandle implements WriteAdvHandle {
         }
 
         if (!waitForWritable(distributionSchedule.getWriteSet(op.getEntryId()),
-                    clientCtx.getConf().waitForWriteSetMs, 0)) {
+                    (int) clientCtx.getConf().waitForWriteSetMs, (long) 0)) {
             op.allowFailFastOnUnwritableChannel();
         }
 

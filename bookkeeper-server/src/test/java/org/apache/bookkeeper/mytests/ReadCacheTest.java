@@ -91,10 +91,6 @@ public class ReadCacheTest {
 	@Test
 	public void getTest() {
 		System.out.println("------GET--------");
-		
-        if(expectedException != null) {
-        	exceptionRule.expect(expectedException);
-        }
         
         cache.put(ledgerId, entryId, entry);
 		System.out.println("LedgerID: "+ledgerId+ " entryID: "+entryId);
