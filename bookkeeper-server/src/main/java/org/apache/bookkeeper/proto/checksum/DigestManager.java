@@ -190,13 +190,13 @@ public abstract class DigestManager {
 
         long actualLedgerId = dataReceived.readLong();
         long actualEntryId = dataReceived.readLong();
-
+        
         if (actualLedgerId != ledgerId) {
             logger.error("Ledger-id mismatch in authenticated message, expected: " + ledgerId + " , actual: "
                          + actualLedgerId);
             throw new BKDigestMatchException();
         }
-
+        
         if (!skipEntryIdCheck && actualEntryId != entryId) {
             logger.error("Entry-id mismatch in authenticated message, expected: " + entryId + " , actual: "
                          + actualEntryId);

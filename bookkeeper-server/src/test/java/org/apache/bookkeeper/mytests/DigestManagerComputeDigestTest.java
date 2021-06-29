@@ -93,7 +93,7 @@ public class DigestManagerComputeDigestTest {
 		}
 	}
 
-	//method used to generate a buffer related to the single entry, filled with the informations of the entry like indicated in the documentation. 
+	//method used to generate a buffer related to the single entry, filled with the informations of the entry like indicated in the documentation
 	private static ByteBuf generateEntry(int length) {
 		byte[] data = new byte[length];
 		ByteBuf byteBuffer = Unpooled.buffer(1024);

@@ -53,21 +53,24 @@ public class DigestManagerVerifyDigestTest {
 	public static Collection<Object[]> DigestManagerParameters() throws Exception {
 		return Arrays.asList(new Object[][] {
 			
-			//entryId, dataReceived, ledgerId, result
+			//ledgerId, dataReceived, entryId, result
 			
 			//Suite minimale
 			{-1, null, -1, NullPointerException.class},
 			{0, generateDataWithDigest(1, 1), 0, BKDigestMatchException.class},
 			{1, generateDataWithDigest(1, 0), 0, BKDigestMatchException.class},
 			{0, generateDataWithDigest(0, 0), 1, BKDigestMatchException.class},
-			{1, generateDataWithDigest(0, 1), 1, BKDigestMatchException.class}
+			{1, generateDataWithDigest(0, 1), 1, BKDigestMatchException.class},
+			
+			//Aggiunti dopo miglioramento della test suite
+			{1, generateBadDataWithDigest(0, 1, DigestType.MAC), 1, BKDigestMatchException.class}
 		});
 	}
 
-	public DigestManagerVerifyDigestTest(int entryId, ByteBufList dataReceived, int ledgerId, Object result) {
-		this.entryId = entryId;
-		this.dataReceived = dataReceived;
+	public DigestManagerVerifyDigestTest(int ledgerId, ByteBufList dataReceived, int entryId, Object result) {
 		this.ledgerId = ledgerId;
+		this.dataReceived = dataReceived;
+		this.entryId = entryId;
 		this.result = result;
 	}
 
@@ -79,7 +82,7 @@ public class DigestManagerVerifyDigestTest {
 	}
 	
 	@Test
-	public void testVerifyDigestData() throws GeneralSecurityException{
+	public void testVerifyDigestData() throws GeneralSecurityException {
 
 		try {
 			assertEquals(buffer, digestManager.verifyDigestAndReturnData(entryId, dataReceived.coalesce(dataReceived)));
