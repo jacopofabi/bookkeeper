@@ -178,7 +178,7 @@ public abstract class DigestManager {
 
         ByteBuf digest = allocator.buffer(macCodeLength);
         populateValueAndReset(digest);
-
+        
         try {
             if (digest.compareTo(dataReceived.slice(METADATA_LENGTH, macCodeLength)) != 0) {
                 logger.error("Mac mismatch for ledger-id: " + ledgerId + ", entry-id: " + entryId);

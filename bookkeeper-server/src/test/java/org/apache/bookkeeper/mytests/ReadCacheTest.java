@@ -24,6 +24,7 @@ import io.netty.buffer.UnpooledByteBufAllocator;
 public class ReadCacheTest {
     private static final ByteBufAllocator allocator = UnpooledByteBufAllocator.DEFAULT;
     private static final int entrySize = 1024;
+    private static final int entrySizeMutation = 5120;
 	private static final int numEntries = 10;
     private static final int cacheSize = numEntries * entrySize;
     
@@ -52,15 +53,23 @@ public class ReadCacheTest {
     public static Collection<Object[]> data() {
     	ByteBuf validEntry = allocator.buffer(entrySize);
     	ByteBuf invalidEntry = allocator.buffer(cacheSize+1);
+    	ByteBuf mutationEntry = allocator.buffer(entrySizeMutation);
     	validEntry.writerIndex(validEntry.capacity());
     	invalidEntry.writerIndex(invalidEntry.capacity());
+    	mutationEntry.writerIndex(mutationEntry.capacity());
     	
         return Arrays.asList(new Object[][] {
         		// ledgerId, entryId, entry, expectedNumberEntries, exception
+        	
+        		//Suite minimale
 	            {0, -1, null, 0, NullPointerException.class},
 	            {-1, 0, validEntry, 0, IllegalArgumentException.class},
 	            {1, 0, validEntry, 1, null},
-	            {1, 1, invalidEntry, 0, IndexOutOfBoundsException.class}
+	            {1, 1, invalidEntry, 0, IndexOutOfBoundsException.class},
+	            
+	            //Mutation
+	            {1, 0, mutationEntry, 1, null}
+	            
         });
     }
     

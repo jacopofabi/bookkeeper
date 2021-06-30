@@ -321,6 +321,7 @@
           <targetTests>
             <param>org.apache.bookkeeper.mytests.ReadCacheTest</param>
             <param>org.apache.bookkeeper.mytests.DigestManagerComputeDigestTest</param>
+			<param>org.apache.bookkeeper.mytests.DigestManagerVerifyDigestTest</param>
           </targetTests>
         </configuration>
       </plugin>

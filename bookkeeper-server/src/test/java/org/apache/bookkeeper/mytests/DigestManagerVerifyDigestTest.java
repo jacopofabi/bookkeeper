@@ -63,7 +63,7 @@ public class DigestManagerVerifyDigestTest {
 			{1, generateDataWithDigest(0, 1), 1, BKDigestMatchException.class},
 			
 			//Aggiunti dopo miglioramento della test suite
-			{1, generateBadDataWithDigest(0, 1, DigestType.MAC), 1, BKDigestMatchException.class}
+			{1, generateBadDataWithDigest(0, 1), 1, BKDigestMatchException.class}
 		});
 	}
 
@@ -85,7 +85,7 @@ public class DigestManagerVerifyDigestTest {
 	public void testVerifyDigestData() throws GeneralSecurityException {
 
 		try {
-			assertEquals(buffer, digestManager.verifyDigestAndReturnData(entryId, dataReceived.coalesce(dataReceived)));
+			assertEquals(buffer, digestManager.verifyDigestAndReturnData(entryId, ByteBufList.coalesce(dataReceived)));
 		} catch (Exception e) {
 			assertEquals(result, e.getClass());
 		}
@@ -98,7 +98,7 @@ public class DigestManagerVerifyDigestTest {
 		return byteBufList;
 	}
 	
-	private static ByteBufList generateBadDataWithDigest(int receivedLedgerId, int receivedEntryId, DigestType receivedType) throws GeneralSecurityException {
+	private static ByteBufList generateBadDataWithDigest(int receivedLedgerId, int receivedEntryId) {
 		ByteBuf byteBuf = generateEntryMutationBranch(length);
 		ByteBuf badHeader = Unpooled.buffer(length);
 		return ByteBufList.get(badHeader, byteBuf);
