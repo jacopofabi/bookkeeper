@@ -103,15 +103,13 @@ public class ReadCache implements Closeable {
         } finally {
             lock.readLock().unlock();
         }
-
+        
         // We could not insert in segment, we to get the write lock and roll-over to
         // next segment
         lock.writeLock().lock();
 
         try {
             int offset = currentSegmentOffset.getAndAdd(entrySize);
-            System.out.println("off+entr= " + (offset+entrySize));
-            System.out.println("segsize= " + segmentSize);
             if (offset + entrySize > segmentSize) {
                 // Rollover to next segment
                 currentSegmentIdx = (currentSegmentIdx + 1) % cacheSegments.size();

@@ -34,7 +34,7 @@ public class ReadCachePutTest {
 	private long ledgerId;
 	private long entryId;
 	private ByteBuf entry;
-	private int expected;
+	private int expectedNumberEntries;
 	private Class<? extends Exception> expectedException;
 	
 	//Test entries
@@ -43,11 +43,11 @@ public class ReadCachePutTest {
 	private static ByteBuf nullEntry;
 	
 	
-	public ReadCachePutTest(long ledgerId, long entryId, ByteBuf entry, int expected, Class<? extends Exception> expectedException) {
+	public ReadCachePutTest(long ledgerId, long entryId, ByteBuf entry, int expectedNumberEntries, Class<? extends Exception> expectedException) {
 		this.ledgerId = ledgerId;
 		this.entryId = entryId;
 		this.entry = entry;
-		this.expected = expected;
+		this.expectedNumberEntries = expectedNumberEntries;
 		this.expectedException = expectedException;
 		
     	//test is successful when "expectedException" is thrown
@@ -73,7 +73,10 @@ public class ReadCachePutTest {
             {0, -1, nullEntry, 0, NullPointerException.class},
             {-1, 0, validEntry, 0, IllegalArgumentException.class},
             {1, 0, validEntry, 1, null},
-            {1, 1, invalidEntry, 0, IndexOutOfBoundsException.class}
+            {1, 1, invalidEntry, 0, IndexOutOfBoundsException.class},
+            
+            //Aggiunto dopo miglioramento della test suite
+            {1, 0, validEntry, NUM_ENTRIES, null}
         });
     }
     
@@ -88,9 +91,16 @@ public class ReadCachePutTest {
     
 	@Test
 	public void putTest() {
-        //put an entry into the cache, depending on the parameters we will have different behaviors
-        cache.put(ledgerId, entryId, entry);
-        assertEquals(cache.count(), expected);
+		int i=0;
+        if(expectedNumberEntries > 1) {
+    		for(i=0;i<NUM_ENTRIES;i++) {
+            	cache.put(ledgerId, i, entry);
+            }
+        }
+        else {
+        	cache.put(ledgerId, entryId, entry);
+        }
+        assertEquals(expectedNumberEntries, cache.count());
 	}
 	
 	@After
