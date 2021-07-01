@@ -316,10 +316,11 @@
         <configuration>
           <targetClasses>
             <param>org.apache.bookkeeper.bookie.storage.ldb.ReadCache</param>
-            <param>org.apache.bookkeeper.bookie.storage.ldb.DigestManager</param>
+            <param>org.apache.bookkeeper.proto.checksum.DigestManager</param>
           </targetClasses>
           <targetTests>
-            <param>org.apache.bookkeeper.mytests.ReadCacheTest</param>
+            <param>org.apache.bookkeeper.mytests.ReadCacheGetTest</param>
+            <param>org.apache.bookkeeper.mytests.ReadCachePutTest</param>
             <param>org.apache.bookkeeper.mytests.DigestManagerComputeDigestTest</param>
 			<param>org.apache.bookkeeper.mytests.DigestManagerVerifyDigestTest</param>
           </targetTests>
