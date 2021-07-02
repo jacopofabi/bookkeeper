@@ -21,6 +21,7 @@ package org.apache.bookkeeper.mytests;
 
 import static org.junit.Assert.assertEquals;
 
+import java.nio.ByteBuffer;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import java.util.Collection;
@@ -60,8 +61,11 @@ public class DigestManagerComputeDigestTest {
 			//Suite minimale, migliorata tramite l'aggiunta del parametro useV2Protocol
 			{-1,-1,0,null,false,NullPointerException.class},
 			{0,1,0,generateEntry(0),true,null},
-			{1,2,1,generateEntry(1),false,null}
+			{1,2,1,generateEntry(1),false,null},
 
+			//Aggiunti dopo miglioramento della test suite
+			{0,1,0,generateWrappedEntry(0),true,null},
+			{0,1,0,generateCompositeByteBufEntry(0),true,null}
 		});
 	}
 
@@ -96,6 +100,30 @@ public class DigestManagerComputeDigestTest {
 	private static ByteBuf generateEntry(int length) {
 		byte[] data = new byte[length];
 		ByteBuf byteBuffer = Unpooled.buffer(1024);
+		byteBuffer.writeLong(ledgerId); // Ledger
+		byteBuffer.writeLong(entryId); // Entry
+		byteBuffer.writeLong(lastAddConfirmed); // LAC
+		byteBuffer.writeLong(length); // Length
+		byteBuffer.writeBytes(data);
+		return byteBuffer;
+	}
+
+	//method used to wrap a byte buffer into a new buffer
+	private static ByteBuf generateWrappedEntry(int length) {
+		byte[] data = new byte[length];
+		ByteBuf byteBuffer = Unpooled.buffer(1024);
+		byteBuffer.writeLong(ledgerId); // Ledger
+		byteBuffer.writeLong(entryId); // Entry
+		byteBuffer.writeLong(lastAddConfirmed); // LAC
+		byteBuffer.writeLong(length); // Length
+		byteBuffer.writeBytes(data);
+		return Unpooled.wrappedBuffer(byteBuffer);
+	}
+	
+	//method used to create a CompositeByteBuf to increase branch coverage
+	private static ByteBuf generateCompositeByteBufEntry(int length) {
+		byte[] data = new byte[length];
+		ByteBuf byteBuffer = Unpooled.compositeBuffer();
 		byteBuffer.writeLong(ledgerId); // Ledger
 		byteBuffer.writeLong(entryId); // Entry
 		byteBuffer.writeLong(lastAddConfirmed); // LAC

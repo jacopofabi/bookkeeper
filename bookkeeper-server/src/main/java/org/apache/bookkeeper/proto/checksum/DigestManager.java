@@ -113,7 +113,7 @@ public abstract class DigestManager {
         headersBuffer.writeLong(length);
 
         update(headersBuffer);
-
+        
         // don't unwrap slices
         final ByteBuf unwrapped = data.unwrap() != null && data.unwrap() instanceof CompositeByteBuf
                 ? data.unwrap() : data;
@@ -163,7 +163,7 @@ public abstract class DigestManager {
 
     private void verifyDigest(long entryId, ByteBuf dataReceived, boolean skipEntryIdCheck)
             throws BKDigestMatchException {
-
+    	
         if ((METADATA_LENGTH + macCodeLength) > dataReceived.readableBytes()) {
             logger.error("Data received is smaller than the minimum for this digest type. "
                     + " Either the packet it corrupt, or the wrong digest is configured. "

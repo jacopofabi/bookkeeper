@@ -57,13 +57,14 @@ public class DigestManagerVerifyDigestTest {
 			
 			//Suite minimale
 			{-1, null, -1, NullPointerException.class},
-			{0, generateDataWithDigest(1, 1), 0, BKDigestMatchException.class},
-			{1, generateDataWithDigest(1, 0), 0, BKDigestMatchException.class},
-			{0, generateDataWithDigest(0, 0), 1, BKDigestMatchException.class},
-			{1, generateDataWithDigest(0, 1), 1, BKDigestMatchException.class},
+			{0, generateEntryWithDigest(1, 1, DigestType.MAC), 0, BKDigestMatchException.class},
+			{1, generateEntryWithDigest(1, 0, DigestType.MAC), 0, BKDigestMatchException.class},
+			{0, generateEntryWithDigest(0, 0, DigestType.MAC), 1, BKDigestMatchException.class},
+			{1, generateEntryWithDigest(0, 1, DigestType.MAC), 1, BKDigestMatchException.class},
 			
 			//Aggiunti dopo miglioramento della test suite
-			{1, generateBadDataWithDigest(0, 1), 1, BKDigestMatchException.class}
+			{1, generateBadEntryWithDigest(0, 1), 1, BKDigestMatchException.class},
+			{1, generateEntryWithDigest(0, 1, DigestType.CRC32C), 1, BKDigestMatchException.class}
 		});
 	}
 
@@ -78,7 +79,7 @@ public class DigestManagerVerifyDigestTest {
 	@Before
 	public void beforeTest() throws GeneralSecurityException {
 		digestManager = DigestManager.instantiate(ledgerId, "testPassword".getBytes(), DigestType.MAC, UnpooledByteBufAllocator.DEFAULT, false);
-		buffer = generateEntryMutationBranch(length);
+		buffer = generateEntry(length);
 	}
 	
 	@Test
@@ -91,23 +92,25 @@ public class DigestManagerVerifyDigestTest {
 		}
 	}
 
-	private static ByteBufList generateDataWithDigest(int receivedLedgerId, int receivedEntryId) throws GeneralSecurityException {
-		DigestManager digest = DigestManager.instantiate(receivedLedgerId, "testPassword".getBytes(), DigestType.MAC, UnpooledByteBufAllocator.DEFAULT, false);
-		ByteBuf byteBuf = generateEntryMutationBranch(length);
+	private static ByteBufList generateEntryWithDigest(int receivedLedgerId, int receivedEntryId, DigestType type) throws GeneralSecurityException {
+		DigestManager digest = DigestManager.instantiate(receivedLedgerId, "testPassword".getBytes(), type, UnpooledByteBufAllocator.DEFAULT, false);
+		ByteBuf byteBuf = generateEntry(length);
 		ByteBufList byteBufList = digest.computeDigestAndPackageForSending(receivedEntryId, 0,  length, byteBuf);
 		return byteBufList;
 	}
 	
-	private static ByteBufList generateBadDataWithDigest(int receivedLedgerId, int receivedEntryId) {
-		ByteBuf byteBuf = generateEntryMutationBranch(length);
+	private static ByteBufList generateBadEntryWithDigest(int receivedLedgerId, int receivedEntryId) {
+		ByteBuf byteBuf = generateEntry(length);
 		ByteBuf badHeader = Unpooled.buffer(length);
 		return ByteBufList.get(badHeader, byteBuf);
 	}
 
-	private static ByteBuf generateEntryMutationBranch(int length) {
-		byte[] data = "testString".getBytes();
+	private static ByteBuf generateEntry(int length) {
+		//creates a ByteBuf with 27+length dimension, and writes other "data" bytes on it
+		byte[] data = "AnotherTwentyBytes!!".getBytes();
 		ByteBuf bb = Unpooled.buffer(27+length);
 		bb.writeBytes(data);
+		//buffer with 52 bytes
 		return bb;
 	}
 
