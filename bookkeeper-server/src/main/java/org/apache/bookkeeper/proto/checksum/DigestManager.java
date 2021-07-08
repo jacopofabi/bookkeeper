@@ -126,7 +126,6 @@ public abstract class DigestManager {
             update(unwrapped);
         }
         populateValueAndReset(headersBuffer);
-
         return ByteBufList.get(headersBuffer, unwrapped);
     }
 
@@ -163,7 +162,6 @@ public abstract class DigestManager {
 
     private void verifyDigest(long entryId, ByteBuf dataReceived, boolean skipEntryIdCheck)
             throws BKDigestMatchException {
-    	
         if ((METADATA_LENGTH + macCodeLength) > dataReceived.readableBytes()) {
             logger.error("Data received is smaller than the minimum for this digest type. "
                     + " Either the packet it corrupt, or the wrong digest is configured. "

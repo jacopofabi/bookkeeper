@@ -41,7 +41,8 @@ import io.netty.buffer.UnpooledByteBufAllocator;
 @RunWith(Parameterized.class)
 public class DigestManagerVerifyDigestTest {
 	private static DigestManager digestManager;
-	private static int length = 5;
+	private static int length = 52;
+	private static int mutationLen = 32;
 	private ByteBuf buffer;
 	
 	private int entryId;
@@ -57,14 +58,18 @@ public class DigestManagerVerifyDigestTest {
 			
 			//Suite minimale
 			{-1, null, -1, NullPointerException.class},
-			{0, generateEntryWithDigest(1, 1, DigestType.MAC), 0, BKDigestMatchException.class},
-			{1, generateEntryWithDigest(1, 0, DigestType.MAC), 0, BKDigestMatchException.class},
-			{0, generateEntryWithDigest(0, 0, DigestType.MAC), 1, BKDigestMatchException.class},
-			{1, generateEntryWithDigest(0, 1, DigestType.MAC), 1, BKDigestMatchException.class},
+			{0, generateEntryWithDigest(length, 1, 1, DigestType.MAC), 0, BKDigestMatchException.class},
+			{1, generateEntryWithDigest(length, 1, 0, DigestType.MAC), 0, BKDigestMatchException.class},
+			{0, generateEntryWithDigest(length, 0, 0, DigestType.MAC), 1, BKDigestMatchException.class},
+			{1, generateEntryWithDigest(length, 0, 1, DigestType.MAC), 1, BKDigestMatchException.class},
 			
 			//Aggiunti dopo miglioramento della test suite
-			{1, generateBadEntryWithDigest(0, 1), 1, BKDigestMatchException.class},
-			{1, generateEntryWithDigest(0, 1, DigestType.CRC32C), 1, BKDigestMatchException.class}
+			{1, generateBadEntryWithDigest(length, 0, 1), 1, BKDigestMatchException.class},
+			{1, generateEntryWithDigest(length, 0, 1, DigestType.CRC32C), 1, BKDigestMatchException.class},
+			
+			//Mutation
+			{1, generateEntryWithDigest(length, 1, 1, DigestType.CRC32C), 1, BKDigestMatchException.class},
+			{1, generateMutationEntryWithDigest(mutationLen, 0, 0, DigestType.MAC), 1, BKDigestMatchException.class}
 		});
 	}
 
@@ -92,25 +97,33 @@ public class DigestManagerVerifyDigestTest {
 		}
 	}
 
-	private static ByteBufList generateEntryWithDigest(int receivedLedgerId, int receivedEntryId, DigestType type) throws GeneralSecurityException {
+	//generate a valid entry and calculate the digest related to the buffer send, and return both buffer+digest
+	private static ByteBufList generateEntryWithDigest(int length, int receivedLedgerId, int receivedEntryId, DigestType type) throws GeneralSecurityException {
 		DigestManager digest = DigestManager.instantiate(receivedLedgerId, "testPassword".getBytes(), type, UnpooledByteBufAllocator.DEFAULT, false);
 		ByteBuf byteBuf = generateEntry(length);
 		ByteBufList byteBufList = digest.computeDigestAndPackageForSending(receivedEntryId, 0,  length, byteBuf);
 		return byteBufList;
 	}
 	
-	private static ByteBufList generateBadEntryWithDigest(int receivedLedgerId, int receivedEntryId) {
+	//generate an entry for mutation, where the dimension is equal to METADATA_LENGTH + MAC_CODE_LENGTH (= 52)
+	private static ByteBufList generateMutationEntryWithDigest(int length, int receivedLedgerId, int receivedEntryId, DigestType type) throws GeneralSecurityException {
+		DigestManager digest = DigestManager.instantiate(receivedLedgerId, "testPassword".getBytes(), type, UnpooledByteBufAllocator.DEFAULT, false);
+		ByteBuf byteBuf = Unpooled.buffer(mutationLen);
+		ByteBufList byteBufList = digest.computeDigestAndPackageForSending(receivedEntryId, 0,  length, byteBuf);
+		return byteBufList;
+	}
+	
+	private static ByteBufList generateBadEntryWithDigest(int length, int receivedLedgerId, int receivedEntryId) {
 		ByteBuf byteBuf = generateEntry(length);
 		ByteBuf badHeader = Unpooled.buffer(length);
 		return ByteBufList.get(badHeader, byteBuf);
 	}
 
 	private static ByteBuf generateEntry(int length) {
-		//creates a ByteBuf with 27+length dimension, and writes other "data" bytes on it
+		//creates a ByteBuf with "length" bytes dimension, and writes "data" bytes on it
 		byte[] data = "AnotherTwentyBytes!!".getBytes();
-		ByteBuf bb = Unpooled.buffer(27+length);
+		ByteBuf bb = Unpooled.buffer(length);
 		bb.writeBytes(data);
-		//buffer with 52 bytes
 		return bb;
 	}
 
