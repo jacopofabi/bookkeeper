@@ -42,7 +42,6 @@ import io.netty.buffer.UnpooledByteBufAllocator;
 public class DigestManagerVerifyDigestTest {
 	private static DigestManager digestManager;
 	private static int length = 52;
-	private static int mutationLen = 32;
 	private ByteBuf buffer;
 	
 	private int entryId;
@@ -68,8 +67,7 @@ public class DigestManagerVerifyDigestTest {
 			{1, generateEntryWithDigest(length, 0, 1, DigestType.CRC32C), 1, BKDigestMatchException.class},
 			
 			//Mutation
-			{1, generateEntryWithDigest(length, 1, 1, DigestType.CRC32C), 1, BKDigestMatchException.class},
-			{1, generateMutationEntryWithDigest(mutationLen, 0, 0, DigestType.MAC), 1, BKDigestMatchException.class}
+			{1, generateEntryWithDigest(length, 1, 1, DigestType.CRC32C), 1, BKDigestMatchException.class}
 		});
 	}
 
@@ -101,14 +99,6 @@ public class DigestManagerVerifyDigestTest {
 	private static ByteBufList generateEntryWithDigest(int length, int receivedLedgerId, int receivedEntryId, DigestType type) throws GeneralSecurityException {
 		DigestManager digest = DigestManager.instantiate(receivedLedgerId, "testPassword".getBytes(), type, UnpooledByteBufAllocator.DEFAULT, false);
 		ByteBuf byteBuf = generateEntry(length);
-		ByteBufList byteBufList = digest.computeDigestAndPackageForSending(receivedEntryId, 0,  length, byteBuf);
-		return byteBufList;
-	}
-	
-	//generate an entry for mutation, where the dimension is equal to METADATA_LENGTH + MAC_CODE_LENGTH (= 52)
-	private static ByteBufList generateMutationEntryWithDigest(int length, int receivedLedgerId, int receivedEntryId, DigestType type) throws GeneralSecurityException {
-		DigestManager digest = DigestManager.instantiate(receivedLedgerId, "testPassword".getBytes(), type, UnpooledByteBufAllocator.DEFAULT, false);
-		ByteBuf byteBuf = Unpooled.buffer(mutationLen);
 		ByteBufList byteBufList = digest.computeDigestAndPackageForSending(receivedEntryId, 0,  length, byteBuf);
 		return byteBufList;
 	}

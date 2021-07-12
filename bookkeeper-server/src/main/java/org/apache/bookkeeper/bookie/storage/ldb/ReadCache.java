@@ -110,8 +110,6 @@ public class ReadCache implements Closeable {
 
         try {
             int offset = currentSegmentOffset.getAndAdd(entrySize);
-            System.out.println("off+ent: " + (offset+entrySize));
-            System.out.println("seg: " + segmentSize);
             if (offset + entrySize > segmentSize) {
                 // Rollover to next segment
                 currentSegmentIdx = (currentSegmentIdx + 1) % cacheSegments.size();

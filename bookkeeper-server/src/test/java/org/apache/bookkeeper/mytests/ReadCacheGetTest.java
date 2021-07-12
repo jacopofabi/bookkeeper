@@ -56,11 +56,6 @@ public class ReadCacheGetTest {
 	
     @Parameters
     public static Collection<Object[]> data() {
-    	ByteBuf validEntry = allocator.buffer(ENTRY_SIZE);
-    	ByteBuf invalidEntry = allocator.buffer(CACHE_SIZE+1);
-    	validEntry.writerIndex(validEntry.capacity());
-    	invalidEntry.writerIndex(invalidEntry.capacity());
-    	
         return Arrays.asList(new Object[][] {
     		// ledgerId, entryId, expectedEntry, expectedException
         	
@@ -68,7 +63,7 @@ public class ReadCacheGetTest {
         	{-1, 0, NULL_ENTRY, IllegalArgumentException.class},	//ledgerId must be greater than 0
             {0, -1, NULL_ENTRY, null},
             {1, 0, NULL_ENTRY, null},
-            {1, 1, ENTRY, null}										//we found only an entry in the ReadCache, with ledgerId=1 and entryId=1
+            {1, 1, ENTRY, null}										//we found only an entry in the ReadCache with ledgerId=1 and entryId=1
         });
     }
     
@@ -78,7 +73,7 @@ public class ReadCacheGetTest {
     public ExpectedException exceptionRule = ExpectedException.none();
 	
     
-    //configurazione dell'ambiente di esecuzione, si istanzia una ReadCache e si inserisce una entry con ledgerId=1 ed entryId=1
+    //configuration of the execution environment, a ReadCache is istantiated and an entry with ledgerId=1 and entryId=1 is inserted
 	@Before
 	public void configure() {
 		cache = new ReadCache(allocator, CACHE_SIZE);

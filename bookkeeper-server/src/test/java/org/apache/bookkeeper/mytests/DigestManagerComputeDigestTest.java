@@ -21,7 +21,6 @@ package org.apache.bookkeeper.mytests;
 
 import static org.junit.Assert.assertEquals;
 
-import java.nio.ByteBuffer;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import java.util.Collection;
@@ -120,7 +119,7 @@ public class DigestManagerComputeDigestTest {
 		return Unpooled.wrappedBuffer(byteBuffer);
 	}
 	
-	//method used to create a CompositeByteBuf to increase branch coverage
+	//method used to create a CompositeByteBuf to increase code coverage
 	private static ByteBuf generateCompositeByteBufEntry(int length) {
 		byte[] data = new byte[length];
 		ByteBuf byteBuffer = Unpooled.compositeBuffer();
